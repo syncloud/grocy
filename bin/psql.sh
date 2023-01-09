@@ -10,8 +10,8 @@ fi
 # shellcheck source=config/env
 . "${SNAP_DATA}/config/env"
 
-if [[ "$(whoami)" == "nextcloud" ]]; then
+if [[ "$(whoami)" == "grocy" ]]; then
     ${DIR}/postgresql/bin/psql.sh -p ${PSQL_PORT} -h ${PSQL_DATABASE} "$@"
 else
-    sudo -E -H -u nextcloud ${DIR}/postgresql/bin/psql.sh -p ${PSQL_PORT} -h ${PSQL_DATABASE} "$@"
+    sudo -E -H -u grocy ${DIR}/postgresql/bin/psql.sh -p ${PSQL_PORT} -h ${PSQL_DATABASE} "$@"
 fi

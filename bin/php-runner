@@ -2,8 +2,8 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-if [[ "$(whoami)" == "nextcloud" ]]; then
+if [[ "$(whoami)" == "grocy" ]]; then
     ${DIR}/php.sh "$@"
 else
-    sudo -H -u nextcloud ${DIR}/php.sh "$@"
+    sudo -H -u grocy ${DIR}/php.sh "$@"
 fi

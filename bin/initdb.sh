@@ -10,8 +10,8 @@ fi
 # shellcheck source=config/env
 . "${SNAP_DATA}/config/env"
 
-if [[ "$(whoami)" == "nextcloud" ]]; then
+if [[ "$(whoami)" == "grocy" ]]; then
     ${DIR}/postgresql/bin/initdb.sh "$@"
 else
-    sudo -E -H -u nextcloud ${DIR}/postgresql/bin/initdb.sh "$@"
+    sudo -E -H -u grocy ${DIR}/postgresql/bin/initdb.sh "$@"
 fi

@@ -36,13 +36,13 @@ class Database:
         shutil.copy(self.postgresql_config, self.database_dir)
 
     def execute(self, database, user, sql):
-        self.run('snap run nextcloud.psql -U {0} -d {1} -c "{2}"'.format(user, database, sql))
+        self.run('snap run grocy.psql -U {0} -d {1} -c "{2}"'.format(user, database, sql))
 
     def restore(self):
-        self.run('snap run nextcloud.psql -f {0} postgres'.format(self.backup_file))
+        self.run('snap run grocy.psql -f {0} postgres'.format(self.backup_file))
 
     def backup(self):
-        self.run('snap run nextcloud.pgdumpall -f {0}'.format(self.backup_file))
+        self.run('snap run grocy.pgdumpall -f {0}'.format(self.backup_file))
         shutil.copy(self.new_major_version_file, self.old_major_version_file)
 
     def run(self, cmd):

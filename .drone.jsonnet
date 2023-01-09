@@ -1,6 +1,6 @@
-local name = "nextcloud";
+local name = "grocy";
 local browser = "firefox";
-local nextcloud = "25.0.2";
+local version = "2.6.2";
 
 local build(arch, test_ui, dind) = [{
     kind: "pipeline",
@@ -22,7 +22,7 @@ local build(arch, test_ui, dind) = [{
             name: "download",
             image: "debian:buster-slim",
             commands: [
-                "./download.sh " + nextcloud
+                "./download.sh " + version
             ]
         },
          {

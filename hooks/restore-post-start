@@ -1,4 +1,4 @@
-#!/snap/nextcloud/current/python/bin/python
+#!/snap/grocy/current/python/bin/python
 
 from installer import Installer
 Installer().restore_post_start()

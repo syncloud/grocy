@@ -1,6 +1,6 @@
 apps:
   postgresql:
-    user: nextcloud
+    user: grocy
     command: bin/service.postgresql.sh start
     daemon: forking
     plugs:
@@ -10,7 +10,7 @@ apps:
     before: [php-fpm]
     
   php-fpm:
-    user: nextcloud
+    user: grocy
     command: bin/service.php-fpm.sh start
     daemon: forking
     plugs:
@@ -23,7 +23,7 @@ apps:
   
   nginx:
     command: bin/service.nginx.sh start
-    user: nextcloud
+    user: grocy
     daemon: simple
     plugs:
     - network
@@ -31,18 +31,12 @@ apps:
     restart-condition: always
     stop-command: bin/service.nginx.sh stop
   
-  occ:
-    command: bin/occ-runner
-
   psql:
     command: bin/psql.sh
 
   pgdumpall:
     command: bin/pg_dumpall.sh
 
-  cron:
-    command: bin/nextcloud-cron
-  
   php:
     command: bin/php-runner
 
@@ -62,7 +56,7 @@ apps:
     command: hooks/restore-post-start
 
 confinement: strict
-description: Nextcloud
+description: Grocy
 grade: stable
-name: nextcloud
-summary: Nextcloud
+name: grocy
+summary: Grocy
