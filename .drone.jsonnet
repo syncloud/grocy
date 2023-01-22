@@ -170,7 +170,8 @@ local build(arch, test_ui, dind) = [{
           "./syncloud-release-* publish -f $PACKAGE -b $DRONE_BRANCH"
          ],
         when: {
-            branch: ["stable", "master"]
+            branch: ["stable", "master"],
+            event: [ "push" ]
         }
         }] + [
         {
@@ -191,7 +192,8 @@ local build(arch, test_ui, dind) = [{
 		             strip_components: 1
             },
             when: {
-              status: [ "failure", "success" ]
+              status: [ "failure", "success" ],
+              event: [ "push" ]
             }
         }
     ],

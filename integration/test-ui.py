@@ -36,7 +36,7 @@ def test_login(selenium, device_user, device_password):
     password.send_keys(device_password)
     selenium.screenshot('login')
     password.send_keys(Keys.RETURN)
-    selenium.find_by_xpath("//*[contains(.,'Stock overview')]")
+    selenium.find_by_xpath("//h2[contains(.,'Stock overview')]")
     selenium.screenshot('main')
 
 
