@@ -1,6 +1,6 @@
 local name = "grocy";
 local browser = "firefox";
-local version = "3.3.2";
+local version = "4.0.1";
 
 local build(arch, test_ui, dind) = [{
     kind: "pipeline",
