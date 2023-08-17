@@ -1,17 +1,12 @@
 import os
-import json
 import pytest
 import requests
 import shutil
-from bs4 import BeautifulSoup
 from os.path import join
-from requests.auth import HTTPBasicAuth
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from subprocess import check_output
 from syncloudlib.integration.hosts import add_host_alias
-from syncloudlib.integration.installer import local_install, wait_for_installer
-from syncloudlib.integration.loop import loop_device_add, loop_device_cleanup
-from syncloudlib.http import wait_for_response
+from syncloudlib.integration.installer import local_install
 
 TMP_DIR = '/tmp/syncloud'
 
