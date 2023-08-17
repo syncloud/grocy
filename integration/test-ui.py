@@ -2,10 +2,7 @@ from os.path import dirname, join
 from subprocess import check_output
 
 import pytest
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
 from syncloudlib.integration.hosts import add_host_alias
 
 DIR = dirname(__file__)
