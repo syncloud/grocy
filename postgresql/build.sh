@@ -8,7 +8,7 @@ MAJOR_VERSION=10
 BUILD_DIR=${DIR}/../build/snap/postgresql
 
 while ! docker build --build-arg MAJOR_VERSION=$MAJOR_VERSION -t postgres:syncloud . ; do
-  sleep 1
+  sleep 10
   echo "retry docker"
 done
 docker run postgres:syncloud postgres --help

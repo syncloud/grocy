@@ -6,7 +6,7 @@ cd ${DIR}
 BUILD_DIR=${DIR}/../build/snap/python
 
 while ! docker build -t python:syncloud . ; do
-  sleep 1
+  sleep 10
   echo "retry docker"
 done
 docker run python:syncloud python --help
