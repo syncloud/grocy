@@ -25,6 +25,19 @@ local build(arch, test_ui, dind) = [{
                 "./download.sh " + version
             ]
         },
+        {
+            name: "build php",
+            image: "docker:" + dind,
+            commands: [
+                "./php/build.sh"
+            ],
+            volumes: [
+                {
+                    name: "dockersock",
+                    path: "/var/run"
+                }
+            ]
+        },
          {
             name: "package postgresql",
             image: "docker:" + dind,
@@ -43,19 +56,6 @@ local build(arch, test_ui, dind) = [{
             image: "docker:" + dind,
             commands: [
                 "./python/build.sh"
-            ],
-            volumes: [
-                {
-                    name: "dockersock",
-                    path: "/var/run"
-                }
-            ]
-        },
-        {
-            name: "build php",
-            image: "docker:" + dind,
-            commands: [
-                "./php/build.sh"
             ],
             volumes: [
                 {
