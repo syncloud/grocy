@@ -1,30 +1,30 @@
 FROM php:8.2.8-fpm-alpine
-RUN apt-get update && apt-get install -y \
-		libfreetype6-dev \
-		libjpeg62-turbo-dev \
-		libpng-dev \
-		libzip-dev \
-		libsmbclient-dev \
-		libxml2-dev \
-		libsqlite3-dev \
-		libpq-dev \
-		libldap2-dev \
-		libsasl2-dev \
-		libfreetype6-dev \
-		liblqr-1-0-dev \
-		libfftw3-dev \
-		libjbig-dev \
-		libtiff5-dev \
-		libwebp-dev \
-		libmemcached-dev \
-        libmcrypt-dev \
-		zip \
-		wget \
-		unzip \
-        libgmp-dev \
-        libonig-dev \
-	libicu-dev \
-        libmagickwand-dev --no-install-recommends
+#RUN apt-get update && apt-get install -y \
+#		libfreetype6-dev \
+#		libjpeg62-turbo-dev \
+#		libpng-dev \
+#		libzip-dev \
+#		libsmbclient-dev \
+#		libxml2-dev \
+#		libsqlite3-dev \
+#		libpq-dev \
+#		libldap2-dev \
+#		libsasl2-dev \
+#		libfreetype6-dev \
+#		liblqr-1-0-dev \
+#		libfftw3-dev \
+#		libjbig-dev \
+#		libtiff5-dev \
+#		libwebp-dev \
+#		libmemcached-dev \
+#        libmcrypt-dev \
+#		zip \
+#		wget \
+#		unzip \
+#        libgmp-dev \
+#        libonig-dev \
+#	libicu-dev \
+#        libmagickwand-dev --no-install-recommends
 
 RUN mkdir -p /usr/src/php/ext/memcached
 WORKDIR /usr/src/php/ext/memcached
