@@ -1,30 +1,31 @@
-FROM php:8.2.8-fpm-alpine
-#RUN apt-get update && apt-get install -y \
-#		libfreetype6-dev \
-#		libjpeg62-turbo-dev \
-#		libpng-dev \
-#		libzip-dev \
-#		libsmbclient-dev \
-#		libxml2-dev \
-#		libsqlite3-dev \
-#		libpq-dev \
-#		libldap2-dev \
-#		libsasl2-dev \
-#		libfreetype6-dev \
+FROM php:8.2.8-fpm-alpine3.17
+RUN apk add --update \
+        zlib-dev \
+        libmemcached-dev \
+        cyrus-sasl-dev \
+        gmp-dev \
+        autoconf \
+        g++ \
+        imagemagick-dev \
+        libtool \
+        make \
+        pcre-dev \
+        libsmbclient \
+        freetype-dev \
+        libjpeg-turbo-dev \
+        libpng-dev \
+        libxml2-dev \
+		sqlite-dev \
+		libpq-dev \
+		libldap \
+		fftw-dev \
+		tiff-dev \
+		libwebp-dev \
+        libmcrypt-dev \
+        oniguruma-dev \
+	    icu-dev
 #		liblqr-1-0-dev \
-#		libfftw3-dev \
 #		libjbig-dev \
-#		libtiff5-dev \
-#		libwebp-dev \
-#		libmemcached-dev \
-#        libmcrypt-dev \
-#		zip \
-#		wget \
-#		unzip \
-#        libgmp-dev \
-#        libonig-dev \
-#	libicu-dev \
-#        libmagickwand-dev --no-install-recommends
 
 RUN mkdir -p /usr/src/php/ext/memcached
 WORKDIR /usr/src/php/ext/memcached
@@ -56,4 +57,4 @@ RUN docker-php-ext-enable smbclient
 RUN docker-php-ext-install pdo pdo_pgsql
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j2 gd
-RUN rm -rf /var/lib/apt/lists/*
+RUN apk del autoconf g++ libtool make pcre-dev
