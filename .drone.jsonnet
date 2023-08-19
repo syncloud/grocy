@@ -1,6 +1,6 @@
 local name = "grocy";
 local browser = "firefox";
-local version = "3.3.2";
+local version = "4.0.1";
 
 local build(arch, test_ui, dind) = [{
     kind: "pipeline",
@@ -80,8 +80,8 @@ local build(arch, test_ui, dind) = [{
             ]
         },
         {
-            name: "test-integration-buster",
-            image: "python:3.8-slim-buster",
+            name: "test-integration",
+            image: "python:3.8-slim-bullseye",
             commands: [
               "APP_ARCHIVE_PATH=$(realpath $(cat package.name))",
               "cd integration",
@@ -109,8 +109,8 @@ local build(arch, test_ui, dind) = [{
             ]
         },
         {
-            name: "test-ui-desktop-buster",
-            image: "python:3.8-slim-buster",
+            name: "test-ui-desktop",
+            image: "python:3.8-slim-bullseye",
             commands: [
               "cd integration",
               "./deps.sh",
@@ -122,8 +122,8 @@ local build(arch, test_ui, dind) = [{
             }]
         },
         {
-            name: "test-ui-mobile-buster",
-            image: "python:3.8-slim-buster",
+            name: "test-ui-mobile",
+            image: "python:3.8-slim-bullseye",
             commands: [
               "cd integration",
               "./deps.sh",
@@ -138,7 +138,7 @@ local build(arch, test_ui, dind) = [{
 ] else [] ) +[
     {
         name: "test-upgrade",
-        image: "python:3.8-slim-buster",
+        image: "python:3.8-slim-bullseye",
         commands: [
           "APP_ARCHIVE_PATH=$(realpath $(cat package.name))",
           "cd integration",
@@ -302,5 +302,4 @@ local build(arch, test_ui, dind) = [{
   }];
 
 build("amd64", true, "20.10.21-dind") +
-build("arm64", false, "19.03.8-dind") +
-build("arm", false, "19.03.8-dind")
+build("arm64", false, "19.03.8-dind")
