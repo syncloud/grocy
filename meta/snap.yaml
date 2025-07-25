@@ -1,14 +1,4 @@
 apps:
-  postgresql:
-    user: grocy
-    command: bin/service.postgresql.sh start
-    daemon: forking
-    plugs:
-    - network
-    - network-bind
-    restart-condition: always
-    before: [php-fpm]
-    
   php-fpm:
     user: grocy
     command: bin/service.php-fpm.sh start
@@ -18,7 +8,6 @@ apps:
     - network-bind
     restart-condition: always
     post-start-command: bin/service.php-fpm.sh post-start
-    after: [postgresql]
     before: [nginx]
   
   nginx:
