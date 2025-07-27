@@ -12,5 +12,5 @@ apt install -y wget bzip2 unzip
 
 
 wget https://github.com/grocy/grocy/releases/download/v${VERSION}/grocy_${VERSION}.zip -O grocy.zip
-unzip grocy.zip -d grocy
+unzip -q grocy.zip -d grocy
 mv grocy ${BUILD_DIR}
