@@ -7,12 +7,8 @@ from syncloudlib import fs, linux, gen, logger
 from syncloudlib.application import paths, urls, storage, service
 
 APP_NAME = 'grocy'
-
-INSTALL_USER = 'installer'
 USER_NAME = APP_NAME
-LOG_PATH = 'log/{0}.log'.format(APP_NAME)
 CRON_USER = APP_NAME
-APP_CONFIG_PATH = '{0}/config'.format(APP_NAME)
 
 SYSTEMD_NGINX = '{0}.nginx'.format(APP_NAME)
 SYSTEMD_PHP_FPM = '{0}.php-fpm'.format(APP_NAME)
