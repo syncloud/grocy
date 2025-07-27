@@ -256,16 +256,7 @@ local build(arch, test_ui) = [{
       ],
     }
     for distro in distros
-  ] + (if test_ui then [
-         {
-           name: 'selenium',
-           image: 'selenium/standalone-' + browser + ':4.0.0-beta-3-prerelease-20210402',
-           volumes: [{
-             name: 'shm',
-             path: '/dev/shm',
-           }],
-         },
-       ] else []),
+  ],
   volumes: [
     {
       name: 'dbus',
