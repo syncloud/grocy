@@ -1,6 +1,7 @@
 local name = 'grocy';
 local browser = 'firefox';
 local version = '4.2.0';
+local nginx = '1.24.0';
 local platform = '25.02';
 local selenium = '4.21.0-20240517';
 local deployer = 'https://github.com/syncloud/store/releases/download/4/syncloud-release';
@@ -30,6 +31,20 @@ local build(arch, test_ui) = [{
              image: 'debian:bookworm-slim',
              commands: [
                './download.sh ' + version,
+             ],
+           },
+           {
+             name: 'nginx',
+             image: 'nginx:' + nginx,
+             commands: [
+               './nginx/build.sh',
+             ],
+           },
+           {
+             name: 'nginx test',
+             image: 'syncloud/platform-buster-' + arch + ':' + platform,
+             commands: [
+               './nginx/test.sh',
              ],
            },
            {
