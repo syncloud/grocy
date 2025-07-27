@@ -1,6 +1,7 @@
 local name = 'grocy';
 local browser = 'firefox';
 local version = '4.2.0';
+local php = '8.3.9-fpm-bullseye';
 local nginx = '1.24.0';
 local platform = '25.02';
 local selenium = '4.21.0-20240517';
@@ -48,16 +49,17 @@ local build(arch, test_ui) = [{
              ],
            },
            {
-             name: 'build php',
-             image: 'docker:' + dind,
+             name: 'php',
+             image: 'php:' + php,
              commands: [
-               './php/build.sh',
+               './php/build.sh'
              ],
-             volumes: [
-               {
-                 name: 'dockersock',
-                 path: '/var/run',
-               },
+           },
+           {
+             name: 'php test',
+             image: 'syncloud/platform-buster-' + arch + ':' + platform,
+             commands: [
+               './php/test.sh',
              ],
            },
            {
