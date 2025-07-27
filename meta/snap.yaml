@@ -18,12 +18,6 @@ apps:
     - network
     - network-bind
     restart-condition: always
-  
-  psql:
-    command: bin/psql.sh
-
-  pgdumpall:
-    command: bin/pg_dumpall.sh
 
   php:
     command: bin/php-runner
