@@ -35,6 +35,18 @@ local build(arch, test_ui) = [{
              ],
            },
            {
+             name: 'cli',
+             image: 'golang:1.23',
+             commands: [
+               'cd cli',
+               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/install ./cmd/install',
+               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/configure ./cmd/configure',
+               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/pre-refresh ./cmd/pre-refresh',
+               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/post-refresh ./cmd/post-refresh',
+               'CGO_ENABLED=0 go build -o ../build/snap/bin/cli ./cmd/cli',
+             ],
+           },
+           {
              name: 'nginx',
              image: 'nginx:' + nginx,
              commands: [
@@ -52,7 +64,7 @@ local build(arch, test_ui) = [{
              name: 'php',
              image: 'php:' + php,
              commands: [
-               './php/build.sh'
+               './php/build.sh',
              ],
            },
            {

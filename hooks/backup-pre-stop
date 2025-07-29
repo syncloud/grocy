@@ -1,4 +1,0 @@
-#!/snap/grocy/current/python/bin/python
-
-from installer import Installer
-Installer().backup_pre_stop()
