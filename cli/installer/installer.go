@@ -27,7 +27,6 @@ type Installer struct {
 	appDir             string
 	dataDir            string
 	commonDir          string
-	artisanPath        string
 	executor           *Executor
 	logger             *zap.Logger
 }
@@ -38,7 +37,6 @@ func New(logger *zap.Logger) *Installer {
 	commonDir := fmt.Sprintf("/var/snap/%s/common", App)
 	configDir := path.Join(dataDir, "config")
 	executor := NewExecutor(logger)
-	artisanPath := path.Join(appDir, "/bin/artisan.sh")
 	return &Installer{
 		newVersionFile:     path.Join(appDir, "version"),
 		currentVersionFile: path.Join(dataDir, "version"),
@@ -49,7 +47,6 @@ func New(logger *zap.Logger) *Installer {
 		dataDir:            dataDir,
 		commonDir:          commonDir,
 		executor:           executor,
-		artisanPath:        artisanPath,
 		logger:             logger,
 	}
 }
@@ -88,19 +85,6 @@ func (i *Installer) Configure() error {
 		if err != nil {
 			return err
 		}
-	}
-
-	_, err := i.executor.Run(i.artisanPath, "migrate", "--force")
-	if err != nil {
-		return err
-	}
-	_, err = i.executor.Run(i.artisanPath, "db:seed", "--force")
-	if err != nil {
-		return err
-	}
-	_, err = i.executor.Run(i.artisanPath, "cache:clear")
-	if err != nil {
-		return err
 	}
 
 	return i.UpdateVersion()
@@ -167,11 +151,11 @@ func (i *Installer) StorageChange() error {
 		return err
 	}
 
-	err = i.platformClient.RestartService(fmt.Sprint(App, "nginx"))
+	err = i.platformClient.RestartService(fmt.Sprint(App, ".nginx"))
 	if err != nil {
 		return err
 	}
-	err = i.platformClient.RestartService(fmt.Sprint(App, "php-fpm"))
+	err = i.platformClient.RestartService(fmt.Sprint(App, ".php-fpm"))
 	if err != nil {
 		return err
 	}
