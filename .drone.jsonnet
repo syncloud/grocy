@@ -148,7 +148,7 @@ local build(arch, test_ui) = [{
                     'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
                     'cd test',
                     './deps.sh',
-                    'py.test -x -s ui.py --device-user=testuser --distro=' + distro_default + ' --app-archive-path=$APP_ARCHIVE_PATH --app=' + name + ' --browser=' + browser,
+                    'py.test -x -s ui.py --distro=' + distro_default + ' --app-archive-path=$APP_ARCHIVE_PATH --app=' + name + ' --browser=' + browser,
                   ],
                   privileged: true,
                   volumes: [{
@@ -170,7 +170,7 @@ local build(arch, test_ui) = [{
                 'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
                 'cd test',
                 './deps.sh',
-                'py.test -x -s upgrade.py --device-user=testuser --distro=' + distro_default + ' --app-archive-path=$APP_ARCHIVE_PATH --app=' + name + ' --browser=' + browser,
+                'py.test -x -s upgrade.py --distro=' + distro_default + ' --app-archive-path=$APP_ARCHIVE_PATH --app=' + name + ' --browser=' + browser,
               ],
               privileged: true,
               volumes: [{
