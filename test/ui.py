@@ -40,7 +40,7 @@ def test_login(selenium, device_user, device_password):
 def test_products_100(selenium, device_user, device_password):
     
     selenium.find_by_xpath("//span[.='Manage master data']").click()
-    
+    selenium.find_by_xpath("//span[.='Products']").click()
     selenium.find_by_xpath("//h2[contains(.,'Name')]")
     selenium.screenshot('product')
 
