@@ -43,7 +43,7 @@ def test_products_100(selenium, device_user, device_password):
     selenium.find_by_xpath("//span[.='Products']").click()
     for i in range(100):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
-        selenium.find_by_id("namd").send_keys(i)
+        selenium.find_by_id("name").send_keys(i)
         selenium.find_by_xpath("//button[contains(m,'Save &amp; return to products')]").click()
     selenium.screenshot('product')
 
