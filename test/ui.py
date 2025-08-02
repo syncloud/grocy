@@ -43,7 +43,7 @@ def test_locations(selenium, device_user, device_password):
     selenium.find_by_xpath("//span[.='Locations']").click()
     for i in range(10):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
-        selenium.driver.switch_to.frame(selenium.find_by_id("iFrameResizer2"))
+        selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = 'Location-' + str(i)
         selenium.find_by_id("name").send_keys(name)
         selenium.find_by_xpath("//button[contains(.,'Save')]").click()
