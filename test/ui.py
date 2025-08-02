@@ -37,13 +37,24 @@ def test_login(selenium, device_user, device_password):
     selenium.screenshot('main')
 
 
-def test_products_100(selenium, device_user, device_password):
+def test_locations(selenium, device_user, device_password):
+    
+    selenium.find_by_xpath("//span[.='Manage master data']").click()
+    selenium.find_by_xpath("//span[.='Locations']").click()
+    for i in range(10):
+        selenium.find_by_xpath("//a[contains(.,'Add')]").click()
+        selenium.find_by_id("name").send_keys('Location-' + str(i))
+        selenium.find_by_xpath("//button[contains(.,'Save')]").click()
+    selenium.screenshot('locations')
+
+
+def test_products(selenium, device_user, device_password):
     
     selenium.find_by_xpath("//span[.='Manage master data']").click()
     selenium.find_by_xpath("//span[.='Products']").click()
     for i in range(100):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.find_by_id("name").send_keys(i)
-        selenium.find_by_xpath("//button[contains(m,'Save &amp; return to products')]").click()
-    selenium.screenshot('product')
+        selenium.find_by_xpath("//button[contains(.,'Save & return to products')]").click()
+    selenium.screenshot('products')
 
