@@ -87,14 +87,9 @@ local build(arch, test_ui) = [{
              name: 'test ' + distro,
              image: 'python:' + python,
              commands: [
-               'DOMAIN="' + distro + '.com"',
-               'APP_DOMAIN="' + name + '.' + distro + '.com"',
-               'getent hosts $APP_DOMAIN | sed "s/$APP_DOMAIN/auth.$DOMAIN/g" | tee -a /etc/hosts',
-               'cat /etc/hosts',
-               'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
                'cd test',
                './deps.sh',
-               'py.test -x -s test.py --distro=' + distro + ' --app-archive-path=$APP_ARCHIVE_PATH --app=' + name + ' --arch=' + arch,
+               'py.test -x -s test.py --distro=' + distro + ' --version=$DRONE_BUILD_NUMBER --app=' + name + ' --arch=' + arch,
              ],
            }
            for distro in distros
@@ -145,10 +140,9 @@ local build(arch, test_ui) = [{
                   name: 'test-ui',
                   image: 'python:' + python,
                   commands: [
-                    'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
                     'cd test',
                     './deps.sh',
-                    'py.test -x -s ui.py --browser-height=4000 --distro=' + distro_default + ' --app-archive-path=$APP_ARCHIVE_PATH --app=' + name + ' --browser=' + browser,
+                    'py.test -x -s ui.py --browser-height=4000 --distro=' + distro_default + ' --version=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
                   ],
                   privileged: true,
                   volumes: [{
@@ -163,14 +157,9 @@ local build(arch, test_ui) = [{
               name: 'test-upgrade',
               image: 'python:' + python,
               commands: [
-                'DOMAIN="' + distro_default + '.com"',
-                'APP_DOMAIN="' + name + '.' + distro_default + '.com"',
-                'getent hosts $APP_DOMAIN | sed "s/$APP_DOMAIN/auth.$DOMAIN/g" | tee -a /etc/hosts',
-                'cat /etc/hosts',
-                'APP_ARCHIVE_PATH=$(realpath $(cat package.name))',
                 'cd test',
                 './deps.sh',
-                'py.test -x -s upgrade.py --distro=' + distro_default + ' --app-archive-path=$APP_ARCHIVE_PATH --app=' + name + ' --browser=' + browser,
+                'py.test -x -s upgrade.py --distro=' + distro_default + ' --verison=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
               ],
               privileged: true,
               volumes: [{

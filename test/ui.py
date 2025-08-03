@@ -1,6 +1,7 @@
 from os.path import dirname, join
 from subprocess import check_output
 from selenium.webdriver.common.by import By
+from datetime import datetime
 
 import pytest
 from selenium.webdriver.common.keys import Keys
@@ -40,12 +41,12 @@ def test_login(selenium, device_user, device_password):
     selenium.screenshot('main')
 
 
-def test_master_data(selenium, device_user, device_password):
+def test_master_data(selenium):
     selenium.find_by_xpath("//span[.='Manage master data']").click()
     selenium.screenshot('master-data')
 
 
-def test_locations(selenium, device_user, device_password):
+def test_locations(selenium):
     selenium.find_by_xpath("//span[.='Locations']").click()
     for i in range(10):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
@@ -59,15 +60,31 @@ def test_locations(selenium, device_user, device_password):
     selenium.screenshot('locations')
 
 
-def test_products(selenium, device_user, device_password):
+def test_products(selenium):
     selenium.find_by_xpath("//span[.='Products']").click()
-    for i in range(100):
+    for i in range(1):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.find_by_id("name").send_keys('Product-' + str(i))
-        selenium.find_by_id("location_id").click()
+        selenium.click_by(By.ID, "location_id")
         selenium.find_by_xpath("//option[.='Fridge']").click()
-        selenium.find_by_id("qu_id_stock").click()
+        selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
         selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
     selenium.screenshot('products')
 
+
+def test_purchase(selenium):
+    selenium.find_by_xpath("//span[.='Purchase']").click()
+    selenium.find_by_id("product_id_text_input").send_keys('Product-0')
+    selenium.find_by_xpath("//a[contains(., 'Product-0')]").click()
+    selenium.find_by_id("display_amount").send_keys(10)
+    selenium.find_by_css(".fa-calendar").click()
+    today = datetime.today()
+    selenium.find_by_xpath("//div[@id='best_before_date']/input").send_keys(f'{today.year + 1}-1-1')
+    selenium.find_by_id("save-purchase-button").click()
+    selenium.screenshot('purchase')
+
+def test_stock_overview(selenium):
+    selenium.find_by_xpath("//span[.='Stock overview']").click()
+    selenium.find_by_xpath("//span[contains(., '100 Products')]")
+    selenium.screenshot('stock-overview')
