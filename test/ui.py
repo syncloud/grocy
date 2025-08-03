@@ -11,15 +11,17 @@ TMP_DIR = '/tmp/syncloud/ui'
 
 
 @pytest.fixture(scope="session")
-def module_setup(request, device, artifact_dir, ui_mode):
+def module_setup(request, selenium, device, artifact_dir, ui_mode):
     def module_teardown():
         device.activated()
         device.run_ssh('mkdir -p {0}'.format(TMP_DIR), throw=False)
         device.run_ssh('journalctl > {0}/journalctl.ui.{1}.log'.format(TMP_DIR, ui_mode), throw=False)
         device.run_ssh('cp /var/log/syslog {0}/syslog.ui.{1}.log'.format(TMP_DIR, ui_mode), throw=False)
         device.scp_from_device('{0}/*'.format(TMP_DIR), join(artifact_dir, 'log'))
+        check_output('cp /videos/* {0}'.format(artifact_dir), shell=True)
         check_output('chmod -R a+r {0}'.format(artifact_dir), shell=True)
-
+        selenium.log()
+        
     request.addfinalizer(module_teardown)
 
 
