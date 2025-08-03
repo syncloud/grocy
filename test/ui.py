@@ -60,6 +60,10 @@ def test_products(selenium, device_user, device_password):
     for i in range(100):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.find_by_id("name").send_keys(i)
-        selenium.find_by_xpath("//button[contains(.,'Save & return to products')]").click()
+        selenium.find_by_id("location_id").click()
+        selenium.find_by_xpath("//option[.='Fridge')]").click()
+        selenium.find_by_id("qu_id_stock").click()
+        selenium.find_by_xpath("//option[.='Pack')]").click()
+        selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
     selenium.screenshot('products')
 
