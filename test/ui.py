@@ -37,9 +37,12 @@ def test_login(selenium, device_user, device_password):
     selenium.screenshot('main')
 
 
-def test_locations(selenium, device_user, device_password):
-    
+def test_master_data(selenium, device_user, device_password):
     selenium.find_by_xpath("//span[.='Manage master data']").click()
+    selenium.screenshot('master-data')
+
+
+def test_locations(selenium, device_user, device_password):
     selenium.find_by_xpath("//span[.='Locations']").click()
     for i in range(10):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
@@ -53,8 +56,6 @@ def test_locations(selenium, device_user, device_password):
 
 
 def test_products(selenium, device_user, device_password):
-    
-    selenium.find_by_xpath("//span[.='Manage master data']").click()
     selenium.find_by_xpath("//span[.='Products']").click()
     for i in range(100):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
