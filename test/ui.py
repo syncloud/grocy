@@ -48,7 +48,7 @@ def test_locations(selenium, device_user, device_password):
         selenium.find_by_id("name").send_keys(name)
         selenium.find_by_xpath("//button[contains(.,'Save')]").click()
         selenium.driver.switch_to.default_content()
-        selenium.find_by_xpath(f"//td[.='{name}']")
+        selenium.find_by_xpath(f"//td[contains(.,'{name}')]")
     selenium.screenshot('locations')
 
 
