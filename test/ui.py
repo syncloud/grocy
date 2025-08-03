@@ -1,5 +1,6 @@
 from os.path import dirname, join
 from subprocess import check_output
+from selenium.webdriver.common.by import By
 
 import pytest
 from selenium.webdriver.common.keys import Keys
@@ -49,7 +50,7 @@ def test_locations(selenium, device_user, device_password):
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = 'Location-' + str(i)
         selenium.find_by_id("name").send_keys(name)
-        selenium.click_by("//button[contains(.,'Save')]")
+        selenium.click_by(By.XPATH, "//button[contains(.,'Save')]")
         selenium.driver.switch_to.default_content()
         selenium.find_by_xpath(f"//td[contains(.,'{name}')]")
     selenium.screenshot('locations')
