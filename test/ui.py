@@ -52,6 +52,7 @@ def test_locations(selenium, device_user, device_password):
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = 'Location-' + str(i)
         selenium.find_by_id("name").send_keys(name)
+        selenium.find_by_id("description").send_keys(f"{name} description")
         selenium.click_by(By.XPATH, "//button[contains(.,'Save')]")
         selenium.driver.switch_to.default_content()
         selenium.find_by_xpath(f"//td[contains(.,'{name}')]")
