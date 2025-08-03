@@ -49,7 +49,7 @@ def test_locations(selenium, device_user, device_password):
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = 'Location-' + str(i)
         selenium.find_by_id("name").send_keys(name)
-        selenium.find_by_xpath("//button[contains(.,'Save')]").click()
+        selenium.click_by("//button[contains(.,'Save')]")
         selenium.driver.switch_to.default_content()
         selenium.find_by_xpath(f"//td[contains(.,'{name}')]")
     selenium.screenshot('locations')
@@ -59,7 +59,7 @@ def test_products(selenium, device_user, device_password):
     selenium.find_by_xpath("//span[.='Products']").click()
     for i in range(100):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
-        selenium.find_by_id("name").send_keys(i)
+        selenium.find_by_id("name").send_keys('Product-' + str(i))
         selenium.find_by_id("location_id").click()
         selenium.find_by_xpath("//option[.='Fridge')]").click()
         selenium.find_by_id("qu_id_stock").click()
