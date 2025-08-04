@@ -51,7 +51,7 @@ def test_locations(selenium):
     for i in range(10):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
-        name = f'Location-{i:03d}"
+        name = f"Location-{i:03d}"
         selenium.find_by_id("name").send_keys(name)
         selenium.find_by_id("description").send_keys(f"{name} description")
         selenium.click_by(By.XPATH, "//button[contains(.,'Save')]")
