@@ -62,7 +62,7 @@ def test_locations(selenium):
 
 def test_products(selenium):
     selenium.find_by_xpath("//span[.='Products']").click()
-    for i in range(1):
+    for i in range(100):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.find_by_id("name").send_keys('Product-' + str(i))
         selenium.click_by(By.ID, "location_id")
