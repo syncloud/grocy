@@ -51,7 +51,7 @@ def test_locations(selenium):
     for i in range(10):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
-        name = 'Location-' + str(i)
+        name = f'Location-{i:03d}"
         selenium.find_by_id("name").send_keys(name)
         selenium.find_by_id("description").send_keys(f"{name} description")
         selenium.click_by(By.XPATH, "//button[contains(.,'Save')]")
@@ -64,7 +64,8 @@ def test_products(selenium):
     selenium.find_by_xpath("//span[.='Products']").click()
     for i in range(100):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
-        selenium.find_by_id("name").send_keys('Product-' + str(i))
+        product = f"Product-{i:03d}"
+        selenium.find_by_id("name").send_keys(product)
         selenium.click_by(By.ID, "location_id")
         selenium.find_by_xpath("//option[.='Fridge']").click()
         selenium.click_by(By.ID, "qu_id_stock")
@@ -75,13 +76,15 @@ def test_products(selenium):
 
 def test_purchase(selenium):
     selenium.find_by_xpath("//span[.='Purchase']").click()
-    selenium.find_by_id("product_id_text_input").send_keys('Product-0')
-    selenium.find_by_xpath("//a[contains(., 'Product-0')]").click()
-    selenium.find_by_id("display_amount").send_keys(10)
-    selenium.find_by_css(".fa-calendar").click()
-    today = datetime.today()
-    selenium.find_by_xpath("//div[@id='best_before_date']/input").send_keys(f'{today.year + 1}-1-1')
-    selenium.find_by_id("save-purchase-button").click()
+    for i in range(100):
+        product = f"Product-{i:03d}"
+        selenium.find_by_id("product_id_text_input").send_keys(product)
+        selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
+        selenium.find_by_id("display_amount").send_keys(10)
+        selenium.find_by_css(".fa-calendar").click()
+        today = datetime.today()
+        selenium.find_by_xpath("//div[@id='best_before_date']/input").send_keys(f'{today.year + 1}-1-1')
+        selenium.find_by_id("save-purchase-button").click()
     selenium.screenshot('purchase')
 
 def test_stock_overview(selenium):
