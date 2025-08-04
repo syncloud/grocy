@@ -89,7 +89,7 @@ local build(arch, test_ui) = [{
              commands: [
                'cd test',
                './deps.sh',
-               'py.test -x -s test.py --distro=' + distro + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --arch=' + arch,
+               'py.test -x -s test.py --distro=' + distro + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
              ],
            }
            for distro in distros
@@ -142,7 +142,7 @@ local build(arch, test_ui) = [{
                   commands: [
                     'cd test',
                     './deps.sh',
-                    'py.test -x -s ui.py --browser-height=4000 --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
+                    'py.test -x -s ui.py --browser-height=4000 --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
                   ],
                   privileged: true,
                   volumes: [{
@@ -159,7 +159,7 @@ local build(arch, test_ui) = [{
               commands: [
                 'cd test',
                 './deps.sh',
-                'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name + ' --browser=' + browser,
+                'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
               ],
               privileged: true,
               volumes: [{
