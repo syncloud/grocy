@@ -1,0 +1,47 @@
+apps:
+  php-fpm:
+    user: grocy
+    command: bin/service.php-fpm.sh start
+    daemon: forking
+    plugs:
+    - network
+    - network-bind
+    restart-condition: always
+    post-start-command: bin/service.php-fpm.sh post-start
+    before: [nginx]
+  
+  nginx:
+    command: bin/service.nginx.sh
+    user: grocy
+    daemon: simple
+    plugs:
+    - network
+    - network-bind
+    restart-condition: always
+
+  php:
+    command: bin/php-runner
+
+  cli:
+    command: bin/cli
+
+  storage-change:
+    command: bin/cli storage-change
+
+  access-change:
+    command: bin/cli access-change
+
+  backup-pre-stop:
+    command: bin/cli backup-pre-stop
+
+  restore-pre-start:
+    command: bin/cli restore-pre-start
+
+  restore-post-start:
+    command: bin/cli restore-post-start
+
+confinement: strict
+description: Grocy
+grade: stable
+name: grocy
+summary: Grocy
