@@ -120,9 +120,13 @@ def purchase_v4_5(selenium, count=100):
     selenium.find_by_xpath("//span[.='Purchase']").click()
     for i in range(count):
         product = f"Product-{i:03d}"
-        selenium.find_by_id("product_id_text_input").send_keys(product)
+        product_input = selenium.find_by_id("product_id_text_input")
+        product_input.clear()
+        product_input.send_keys(product)
         selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
-        selenium.find_by_id("display_amount").send_keys(10)
+        amount_input = selenium.find_by_id("display_amount")
+        amount_input.clear()
+        amount_input.send_keys(10)
         selenium.find_by_css(".fa-calendar").click()
         today = datetime.today()
         selenium.find_by_xpath("//div[@id='best_before_date']/input").send_keys(f'{today.year + 1}-1-1')
