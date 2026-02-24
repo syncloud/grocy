@@ -150,24 +150,23 @@ local build(arch, test_ui) = [{
                     path: '/videos',
                   }],
                 },
-              ]
-              else []) +
-         (if arch == 'amd64' then [
-            {
-              name: 'test-upgrade',
-              image: 'python:' + python,
-              commands: [
-                'cd test',
-                './deps.sh',
-                'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
-              ],
-              privileged: true,
-              volumes: [{
-                name: 'videos',
-                path: '/videos',
-              }],
-            },
-          ] else []) + [
+              ] + (if arch == 'amd64' then [
+                {
+                  name: 'test-upgrade',
+                  image: 'python:' + python,
+                  commands: [
+                    'cd test',
+                    './deps.sh',
+                    'py.test -x -s upgrade.py --browser-height=4000 --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+                  ],
+                  privileged: true,
+                  volumes: [{
+                    name: 'videos',
+                    path: '/videos',
+                  }],
+                },
+              ] else [])
+              else []) + [
     {
       name: 'upload',
       image: 'debian:bookworm-slim',
