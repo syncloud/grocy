@@ -1,6 +1,6 @@
 local name = 'grocy';
 local browser = 'firefox';
-local version = '4.2.0';
+local version = '4.5.0';
 local php = '8.3.9-fpm-bullseye';
 local nginx = '1.24.0';
 local platform = '25.02';
