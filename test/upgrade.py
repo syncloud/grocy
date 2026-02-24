@@ -5,10 +5,7 @@ from syncloudlib.integration.installer import local_install
 from syncloudlib.http import wait_for_rest
 import requests
 
-from lib import (login_v4_2, master_data_v4_2, locations_v4_2, products_v4_2,
-                 purchase_v4_2, stock_overview_v4_2,
-                 login_v4_5, locations_v4_5, products_v4_5,
-                 purchase_v4_5, stock_overview_v4_5)
+from test import lib
 
 TMP_DIR = '/tmp/syncloud'
 
@@ -37,27 +34,27 @@ def test_install_stable(device):
 
 
 def test_pre_login(selenium, device_user, device_password):
-    login_v4_2(selenium, device_user, device_password)
+    lib.login_v4_2(selenium, device_user, device_password)
 
 
 def test_pre_master_data(selenium):
-    master_data_v4_2(selenium)
+    lib.master_data_v4_2(selenium)
 
 
 def test_pre_locations(selenium):
-    locations_v4_2(selenium, count=10)
+    lib.locations_v4_2(selenium, count=10)
 
 
 def test_pre_products(selenium):
-    products_v4_2(selenium, count=10)
+    lib.products_v4_2(selenium, count=10)
 
 
 def test_pre_purchase(selenium):
-    purchase_v4_2(selenium, count=10)
+    lib.purchase_v4_2(selenium, count=10)
 
 
 def test_pre_stock_overview(selenium):
-    stock_overview_v4_2(selenium, expected_products=10)
+    lib.stock_overview_v4_2(selenium, expected_products=10)
 
 
 def test_upgrade(device, device_password, device_host, app_archive_path, app_domain):
@@ -66,24 +63,24 @@ def test_upgrade(device, device_password, device_host, app_archive_path, app_dom
 
 
 def test_post_login(selenium, device_user, device_password):
-    login_v4_5(selenium, device_user, device_password)
+    lib.login_v4_5(selenium, device_user, device_password)
 
 
 def test_post_stock_overview(selenium):
-    stock_overview_v4_5(selenium, expected_products=10)
+    lib.stock_overview_v4_5(selenium, expected_products=10)
 
 
 def test_post_locations(selenium):
-    locations_v4_5(selenium, count=10)
+    lib.locations_v4_5(selenium, count=10)
 
 
 def test_post_products(selenium):
-    products_v4_5(selenium, count=10)
+    lib.products_v4_5(selenium, count=10)
 
 
 def test_post_purchase(selenium):
-    purchase_v4_5(selenium, count=10)
+    lib.purchase_v4_5(selenium, count=10)
 
 
 def test_post_stock_overview_final(selenium):
-    stock_overview_v4_5(selenium, expected_products=20)
+    lib.stock_overview_v4_5(selenium, expected_products=20)
