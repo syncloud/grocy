@@ -131,6 +131,7 @@ def purchase_v4_5(selenium, count=100):
         today = datetime.today()
         selenium.find_by_xpath("//div[@id='best_before_date']/input").send_keys(f'{today.year + 1}-1-1')
         selenium.find_by_id("save-purchase-button").click()
+        selenium.find_by_xpath(f"//div[contains(@class,'toast-success')]//div[contains(.,'{product}')]")
     selenium.screenshot('purchase')
 
 
