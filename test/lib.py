@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 from selenium.webdriver.common.by import By
@@ -89,7 +90,9 @@ def master_data_v4_5(selenium):
 
 
 def locations_v4_5(selenium, count=10):
-    selenium.find_by_xpath("//span[.='Locations']").click()
+    locations = selenium.find_by_xpath("//span[.='Locations']")
+    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", locations)
+    locations.click()
     for i in range(count):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
@@ -116,6 +119,17 @@ def products_v4_5(selenium, count=100):
     selenium.screenshot('products')
 
 
+def _set_amount(selenium, value, retries=5):
+    for _ in range(retries):
+        amount_input = selenium.find_by_id("display_amount")
+        amount_input.clear()
+        amount_input.send_keys(value)
+        if amount_input.get_attribute("value") == str(value):
+            return
+        time.sleep(1)
+    raise Exception(f"Failed to set amount to {value}")
+
+
 def purchase_v4_5(selenium, count=100):
     selenium.find_by_xpath("//span[.='Purchase']").click()
     for i in range(count):
@@ -124,9 +138,7 @@ def purchase_v4_5(selenium, count=100):
         product_input.clear()
         product_input.send_keys(product)
         selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
-        amount_input = selenium.find_by_id("display_amount")
-        amount_input.clear()
-        amount_input.send_keys(10)
+        _set_amount(selenium, 10)
         today = datetime.today()
         date_input = selenium.find_by_xpath("//div[@id='best_before_date']/input")
         date_input.click()
