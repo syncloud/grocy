@@ -91,8 +91,8 @@ def master_data_v4_5(selenium):
 
 def _wait_for_modal_close(driver, timeout=10):
     for _ in range(timeout * 2):
-        modals = driver.find_elements(By.CSS_SELECTOR, ".modal-body")
-        if not modals or not any(m.is_displayed() for m in modals):
+        backdrops = driver.find_elements(By.CSS_SELECTOR, ".modal-backdrop")
+        if not backdrops:
             return
         time.sleep(0.5)
 
