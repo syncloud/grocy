@@ -89,21 +89,13 @@ def master_data_v4_5(selenium):
     selenium.screenshot('master-data')
 
 
-def _wait_for_modal_close(driver, timeout=10):
-    for _ in range(timeout * 2):
-        backdrops = driver.find_elements(By.CSS_SELECTOR, ".modal-backdrop")
-        if not backdrops:
-            return
-        time.sleep(0.5)
-
-
 def locations_v4_5(selenium, count=10):
     locations = selenium.find_by_xpath("//span[.='Locations']")
     selenium.driver.execute_script("arguments[0].scrollIntoView(true);", locations)
     locations.click()
     for i in range(count):
-        _wait_for_modal_close(selenium.driver)
-        selenium.find_by_xpath("//a[contains(.,'Add')]").click()
+        add_btn = selenium.find_by_xpath("//a[contains(.,'Add')]")
+        selenium.driver.execute_script("arguments[0].click();", add_btn)
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = f"Location-{i:03d}"
         selenium.find_by_id("name").send_keys(name)
