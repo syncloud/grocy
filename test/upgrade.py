@@ -71,6 +71,10 @@ def test_post_stock_overview(selenium):
     lib.stock_overview_v4_5(selenium, expected_products=10)
 
 
+def test_post_master_data(selenium):
+    lib.master_data_v4_5(selenium)
+
+
 def test_post_locations(selenium):
     lib.locations_v4_5(selenium, count=10)
 
