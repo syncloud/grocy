@@ -63,6 +63,7 @@ def test_upgrade(device, device_password, device_host, app_archive_path, app_dom
 
 
 def test_post_login(selenium, device_user, device_password):
+    selenium.driver.delete_all_cookies()
     lib.login_v4_5(selenium, device_user, device_password)
 
 
