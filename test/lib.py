@@ -115,7 +115,9 @@ def locations_v4_5(selenium, count=10):
 
 def products_v4_5(selenium, count=100):
     _dismiss_modals(selenium)
-    selenium.find_by_xpath("//span[.='Products']").click()
+    products = selenium.find_by_xpath("//span[.='Products']")
+    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", products)
+    products.click()
     for i in range(count):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         product = f"Product-{i:03d}"
@@ -125,6 +127,7 @@ def products_v4_5(selenium, count=100):
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
         selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
+        selenium.find_by_xpath("//table[contains(@class,'dataTable')]")
     selenium.screenshot('products')
 
 
