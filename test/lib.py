@@ -73,6 +73,13 @@ def stock_overview_v4_2(selenium, expected_products=100):
 
 # v4_5 helpers (current grocy UI)
 
+def _dismiss_modals(selenium):
+    selenium.driver.execute_script(
+        "document.querySelectorAll('.modal-backdrop, .modal, .bootbox').forEach(e => e.remove());"
+        "document.body.classList.remove('modal-open');"
+    )
+
+
 def login_v4_5(selenium, device_user, device_password):
     selenium.open_app()
     selenium.find_by_id("username").send_keys(device_user)
@@ -94,10 +101,7 @@ def locations_v4_5(selenium, count=10):
     selenium.driver.execute_script("arguments[0].scrollIntoView(true);", locations)
     locations.click()
     for i in range(count):
-        selenium.driver.execute_script(
-            "document.querySelectorAll('.modal-backdrop, .modal').forEach(e => e.remove());"
-            "document.body.classList.remove('modal-open');"
-        )
+        _dismiss_modals(selenium)
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = f"Location-{i:03d}"
@@ -110,6 +114,7 @@ def locations_v4_5(selenium, count=10):
 
 
 def products_v4_5(selenium, count=100):
+    _dismiss_modals(selenium)
     selenium.find_by_xpath("//span[.='Products']").click()
     for i in range(count):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
@@ -135,6 +140,7 @@ def _set_amount(selenium, value, retries=5):
 
 
 def purchase_v4_5(selenium, count=100):
+    _dismiss_modals(selenium)
     selenium.find_by_xpath("//span[.='Purchase']").click()
     for i in range(count):
         product = f"Product-{i:03d}"
@@ -155,6 +161,7 @@ def purchase_v4_5(selenium, count=100):
 
 
 def stock_overview_v4_5(selenium, expected_products=100):
+    _dismiss_modals(selenium)
     selenium.find_by_xpath("//span[.='Stock overview']").click()
     selenium.find_by_xpath(f"//span[contains(., '{expected_products} Products')]")
     selenium.screenshot('stock-overview')
