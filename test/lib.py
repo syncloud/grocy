@@ -94,8 +94,11 @@ def locations_v4_5(selenium, count=10):
     selenium.driver.execute_script("arguments[0].scrollIntoView(true);", locations)
     locations.click()
     for i in range(count):
-        add_btn = selenium.find_by_xpath("//a[contains(.,'Add')]")
-        selenium.driver.execute_script("arguments[0].click();", add_btn)
+        selenium.driver.execute_script(
+            "document.querySelectorAll('.modal-backdrop, .modal').forEach(e => e.remove());"
+            "document.body.classList.remove('modal-open');"
+        )
+        selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = f"Location-{i:03d}"
         selenium.find_by_id("name").send_keys(name)
