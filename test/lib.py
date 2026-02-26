@@ -118,7 +118,9 @@ def products_v4_5(selenium, count=100):
     products = selenium.find_by_xpath("//span[.='Products']")
     selenium.driver.execute_script("arguments[0].scrollIntoView(true);", products)
     products.click()
+    selenium.screenshot('products-before-add')
     for i in range(count):
+        selenium.screenshot(f'products-add-{i}')
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         product = f"Product-{i:03d}"
         selenium.find_by_id("name").send_keys(product)
