@@ -154,6 +154,7 @@ def purchase_v4_5(selenium, count=100):
         product_input.clear()
         product_input.send_keys(product)
         selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
+        selenium.find_by_xpath(f"//span[@id='productcard-product-name'][contains(.,'{product}')]")
         _set_amount(selenium, 10)
         today = datetime.today()
         date_input = selenium.find_by_xpath("//div[@id='best_before_date']/input")
