@@ -57,6 +57,7 @@ def purchase_v4_2(selenium, count=100):
     selenium.find_by_xpath("//span[.='Purchase']").click()
     for i in range(count):
         product = f"Product-{i:03d}"
+        selenium.click_by(By.ID, "product_id_text_input")
         selenium.find_by_id("product_id_text_input").send_keys(product)
         selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
         selenium.find_by_id("display_amount").send_keys(10)
