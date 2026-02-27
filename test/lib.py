@@ -133,7 +133,7 @@ def products_v4_5(selenium, count=100):
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
         selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
-        selenium.find_by_xpath("//table[contains(@class,'dataTable')]")
+        selenium.find_by_xpath("//h1[contains(.,'Products')]")
     selenium.screenshot('products')
 
 
