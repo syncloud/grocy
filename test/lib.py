@@ -122,9 +122,7 @@ def products_v4_5(selenium, count=100):
     products = selenium.find_by_xpath("//span[.='Products']")
     selenium.driver.execute_script("arguments[0].scrollIntoView(true);", products)
     products.click()
-    selenium.screenshot('products-before-add')
     for i in range(count):
-        selenium.screenshot(f'products-add-{i}')
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         product = f"Product-{i:03d}"
         selenium.find_by_id("name").send_keys(product)
@@ -133,7 +131,6 @@ def products_v4_5(selenium, count=100):
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
         selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
-        selenium.find_by_xpath("//h1[contains(.,'Products')]")
     selenium.screenshot('products')
 
 
@@ -175,3 +172,45 @@ def stock_overview_v4_5(selenium, expected_products=100):
     selenium.find_by_xpath("//span[.='Stock overview']").click()
     selenium.find_by_xpath(f"//span[contains(., '{expected_products} Products')]")
     selenium.screenshot('stock-overview')
+
+
+# v4_5 upgrade-only helpers (isolated from UI test)
+
+def products_v4_5_upgrade(selenium, count=100):
+    _dismiss_modals(selenium)
+    products = selenium.find_by_xpath("//span[.='Products']")
+    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", products)
+    products.click()
+    for i in range(count):
+        selenium.find_by_xpath("//a[contains(.,'Add')]").click()
+        product = f"Product-{i:03d}"
+        selenium.find_by_id("name").send_keys(product)
+        selenium.click_by(By.ID, "location_id")
+        selenium.find_by_xpath("//option[.='Fridge']").click()
+        selenium.click_by(By.ID, "qu_id_stock")
+        selenium.find_by_xpath("//option[.='Pack']").click()
+        selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
+        selenium.find_by_xpath("//h2[contains(.,'Products')]")
+    selenium.screenshot('products')
+
+
+def purchase_v4_5_upgrade(selenium, count=100):
+    _dismiss_modals(selenium)
+    selenium.find_by_xpath("//span[.='Purchase']").click()
+    for i in range(count):
+        product = f"Product-{i:03d}"
+        product_input = selenium.find_by_id("product_id_text_input")
+        product_input.clear()
+        product_input.send_keys(product)
+        selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
+        selenium.find_by_xpath(f"//span[@id='productcard-product-name'][contains(.,'{product}')]")
+        _set_amount(selenium, 10)
+        today = datetime.today()
+        date_input = selenium.find_by_xpath("//div[@id='best_before_date']/input")
+        date_input.click()
+        date_input.send_keys(Keys.CONTROL + 'a')
+        date_input.send_keys(f'{today.year + 1}-01-01')
+        date_input.send_keys(Keys.TAB)
+        selenium.find_by_id("save-purchase-button").click()
+        selenium.find_by_xpath(f"//div[contains(@class,'toast-success')]//div[contains(.,'{product}')]")
+    selenium.screenshot('purchase')

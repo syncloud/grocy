@@ -80,11 +80,11 @@ def test_post_locations(selenium):
 
 
 def test_post_products(selenium):
-    lib.products_v4_5(selenium, count=10)
+    lib.products_v4_5_upgrade(selenium, count=10)
 
 
 def test_post_purchase(selenium):
-    lib.purchase_v4_5(selenium, count=10)
+    lib.purchase_v4_5_upgrade(selenium, count=10)
 
 
 def test_post_stock_overview_final(selenium):
