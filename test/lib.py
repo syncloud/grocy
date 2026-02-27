@@ -26,9 +26,11 @@ def master_data_v4_2(selenium):
 def locations_v4_2(selenium, count=10):
     selenium.find_by_xpath("//span[.='Locations']").click()
     for i in range(count):
+        _dismiss_modals(selenium)
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         selenium.driver.switch_to.frame(selenium.find_by_xpath("//iframe"))
         name = f"Location-{i:03d}"
+        selenium.click_by(By.ID, "name")
         selenium.find_by_id("name").send_keys(name)
         selenium.find_by_id("description").send_keys(f"{name} description")
         selenium.click_by(By.XPATH, "//button[contains(.,'Save')]")
