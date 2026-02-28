@@ -155,12 +155,23 @@ def purchase_v4_5(selenium, count=100):
     _nav_click(selenium, "//span[.='Purchase']")
     for i in range(count):
         product = f"Product-{i:03d}"
+        _purchase_one_v4_5(selenium, product)
+    selenium.screenshot('purchase')
+
+
+def _purchase_one_v4_5(selenium, product, retries=3):
+    for attempt in range(retries):
+        selenium.driver.execute_script(
+            "document.querySelectorAll('.toast').forEach(e => e.remove());"
+        )
         product_input = selenium.find_by_id("product_id_text_input")
         product_input.clear()
         product_input.send_keys(product)
         selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
         selenium.find_by_xpath(f"//span[@id='productcard-product-name'][contains(.,'{product}')]")
         _set_amount(selenium, 10)
+        if selenium.find_by_id("display_amount").get_attribute("value") != "10":
+            continue
         today = datetime.today()
         date_input = selenium.find_by_xpath("//div[@id='best_before_date']/input")
         date_input.click()
@@ -169,7 +180,8 @@ def purchase_v4_5(selenium, count=100):
         date_input.send_keys(Keys.TAB)
         selenium.find_by_id("save-purchase-button").click()
         selenium.find_by_xpath(f"//div[contains(@class,'toast-success')]//div[contains(.,'{product}')]")
-    selenium.screenshot('purchase')
+        return
+    raise Exception(f"Failed to purchase {product} after {retries} attempts")
 
 
 def stock_overview_v4_5(selenium, expected_products=100):
@@ -199,18 +211,5 @@ def purchase_v4_5_upgrade(selenium, count=100, offset=0):
     _nav_click(selenium, "//span[.='Purchase']")
     for i in range(count):
         product = f"Product-{offset + i:03d}"
-        product_input = selenium.find_by_id("product_id_text_input")
-        product_input.clear()
-        product_input.send_keys(product)
-        selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
-        selenium.find_by_xpath(f"//span[@id='productcard-product-name'][contains(.,'{product}')]")
-        _set_amount(selenium, 10)
-        today = datetime.today()
-        date_input = selenium.find_by_xpath("//div[@id='best_before_date']/input")
-        date_input.click()
-        date_input.send_keys(Keys.CONTROL + 'a')
-        date_input.send_keys(f'{today.year + 1}-01-01')
-        date_input.send_keys(Keys.TAB)
-        selenium.find_by_id("save-purchase-button").click()
-        selenium.find_by_xpath(f"//div[contains(@class,'toast-success')]//div[contains(.,'{product}')]")
+        _purchase_one_v4_5(selenium, product)
     selenium.screenshot('purchase')
