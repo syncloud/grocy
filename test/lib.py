@@ -177,14 +177,14 @@ def stock_overview_v4_5(selenium, expected_products=100):
 
 # v4_5 upgrade-only helpers (isolated from UI test)
 
-def products_v4_5_upgrade(selenium, count=100):
+def products_v4_5_upgrade(selenium, count=100, offset=0):
     _dismiss_modals(selenium)
     products = selenium.find_by_xpath("//span[.='Products']")
     selenium.driver.execute_script("arguments[0].scrollIntoView(true);", products)
     products.click()
     for i in range(count):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
-        product = f"Product-{i:03d}"
+        product = f"Product-{offset + i:03d}"
         selenium.find_by_id("name").send_keys(product)
         selenium.click_by(By.ID, "location_id")
         selenium.find_by_xpath("//option[.='Fridge']").click()
@@ -195,11 +195,11 @@ def products_v4_5_upgrade(selenium, count=100):
     selenium.screenshot('products')
 
 
-def purchase_v4_5_upgrade(selenium, count=100):
+def purchase_v4_5_upgrade(selenium, count=100, offset=0):
     _dismiss_modals(selenium)
     selenium.find_by_xpath("//span[.='Purchase']").click()
     for i in range(count):
-        product = f"Product-{i:03d}"
+        product = f"Product-{offset + i:03d}"
         product_input = selenium.find_by_id("product_id_text_input")
         product_input.clear()
         product_input.send_keys(product)
