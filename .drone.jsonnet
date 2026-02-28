@@ -1,10 +1,10 @@
 local name = 'grocy';
 local browser = 'firefox';
-local version = '4.2.0';
+local version = '4.5.0';
 local php = '8.3.9-fpm-bullseye';
 local nginx = '1.24.0';
 local platform = '25.02';
-local selenium = '4.21.0-20240517';
+local selenium = '4.35.0-20250828';
 local deployer = 'https://github.com/syncloud/store/releases/download/4/syncloud-release';
 local python = '3.12-slim-bookworm';
 local distro_default = 'buster';
@@ -150,24 +150,23 @@ local build(arch, test_ui) = [{
                     path: '/videos',
                   }],
                 },
-              ]
-              else []) +
-         (if arch == 'amd64' then [
-            {
-              name: 'test-upgrade',
-              image: 'python:' + python,
-              commands: [
-                'cd test',
-                './deps.sh',
-                'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
-              ],
-              privileged: true,
-              volumes: [{
-                name: 'videos',
-                path: '/videos',
-              }],
-            },
-          ] else []) + [
+              ] + (if arch == 'amd64' then [
+                {
+                  name: 'test-upgrade',
+                  image: 'python:' + python,
+                  commands: [
+                    'cd test',
+                    './deps.sh',
+                    'py.test -x -s upgrade.py --browser-height=4000 --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+                  ],
+                  privileged: true,
+                  volumes: [{
+                    name: 'videos',
+                    path: '/videos',
+                  }],
+                },
+              ] else [])
+              else []) + [
     {
       name: 'upload',
       image: 'debian:bookworm-slim',
