@@ -50,6 +50,7 @@ def products_v4_2(selenium, count=100):
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
         selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
+        selenium.find_by_xpath("//h2[contains(.,'Products')]")
     selenium.screenshot('products')
 
 
@@ -66,6 +67,7 @@ def purchase_v4_2(selenium, count=100):
         today = datetime.today()
         selenium.find_by_xpath("//div[@id='best_before_date']/input").send_keys(f'{today.year + 1}-1-1')
         selenium.find_by_id("save-purchase-button").click()
+        selenium.find_by_xpath(f"//div[contains(@class,'toast-success')]//div[contains(.,'{product}')]")
     selenium.screenshot('purchase')
 
 
@@ -134,6 +136,7 @@ def products_v4_5(selenium, count=100):
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
         selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
+        selenium.find_by_xpath("//h2[contains(.,'Products')]")
     selenium.screenshot('products')
 
 
