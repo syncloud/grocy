@@ -84,6 +84,13 @@ def _dismiss_modals(selenium):
     )
 
 
+def _nav_click(selenium, xpath):
+    _dismiss_modals(selenium)
+    element = selenium.find_by_xpath(xpath)
+    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+    element.click()
+
+
 def login_v4_5(selenium, device_user, device_password):
     selenium.open_app()
     selenium.find_by_id("username").send_keys(device_user)
@@ -96,14 +103,12 @@ def login_v4_5(selenium, device_user, device_password):
 
 
 def master_data_v4_5(selenium):
-    selenium.find_by_xpath("//span[.='Manage master data']").click()
+    _nav_click(selenium, "//span[.='Manage master data']")
     selenium.screenshot('master-data')
 
 
 def locations_v4_5(selenium, count=10):
-    locations = selenium.find_by_xpath("//span[.='Locations']")
-    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", locations)
-    locations.click()
+    _nav_click(selenium, "//span[.='Locations']")
     for i in range(count):
         _dismiss_modals(selenium)
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
@@ -119,10 +124,7 @@ def locations_v4_5(selenium, count=10):
 
 
 def products_v4_5(selenium, count=100):
-    _dismiss_modals(selenium)
-    products = selenium.find_by_xpath("//span[.='Products']")
-    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", products)
-    products.click()
+    _nav_click(selenium, "//span[.='Products']")
     for i in range(count):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         product = f"Product-{i:03d}"
@@ -147,8 +149,7 @@ def _set_amount(selenium, value, retries=5):
 
 
 def purchase_v4_5(selenium, count=100):
-    _dismiss_modals(selenium)
-    selenium.find_by_xpath("//span[.='Purchase']").click()
+    _nav_click(selenium, "//span[.='Purchase']")
     for i in range(count):
         product = f"Product-{i:03d}"
         product_input = selenium.find_by_id("product_id_text_input")
@@ -169,8 +170,7 @@ def purchase_v4_5(selenium, count=100):
 
 
 def stock_overview_v4_5(selenium, expected_products=100):
-    _dismiss_modals(selenium)
-    selenium.find_by_xpath("//span[.='Stock overview']").click()
+    _nav_click(selenium, "//span[.='Stock overview']")
     selenium.find_by_xpath(f"//span[contains(., '{expected_products} Products')]")
     selenium.screenshot('stock-overview')
 
@@ -178,10 +178,7 @@ def stock_overview_v4_5(selenium, expected_products=100):
 # v4_5 upgrade-only helpers (isolated from UI test)
 
 def products_v4_5_upgrade(selenium, count=100, offset=0):
-    _dismiss_modals(selenium)
-    products = selenium.find_by_xpath("//span[.='Products']")
-    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", products)
-    products.click()
+    _nav_click(selenium, "//span[.='Products']")
     for i in range(count):
         selenium.find_by_xpath("//a[contains(.,'Add')]").click()
         product = f"Product-{offset + i:03d}"
@@ -196,8 +193,7 @@ def products_v4_5_upgrade(selenium, count=100, offset=0):
 
 
 def purchase_v4_5_upgrade(selenium, count=100, offset=0):
-    _dismiss_modals(selenium)
-    selenium.find_by_xpath("//span[.='Purchase']").click()
+    _nav_click(selenium, "//span[.='Purchase']")
     for i in range(count):
         product = f"Product-{offset + i:03d}"
         product_input = selenium.find_by_id("product_id_text_input")
