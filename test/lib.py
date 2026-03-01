@@ -59,16 +59,32 @@ def purchase_v4_2(selenium, count=100):
     selenium.click_by(By.XPATH, "//span[.='Purchase']")
     for i in range(count):
         product = f"Product-{i:03d}"
-        selenium.click_by(By.ID, "product_id_text_input")
-        selenium.find_by_id("product_id_text_input").send_keys(product)
+        _purchase_one_v4_2(selenium, product)
+    selenium.screenshot('purchase')
+
+
+def _purchase_one_v4_2(selenium, product, retries=3):
+    for attempt in range(retries):
+        selenium.driver.execute_script(
+            "document.querySelectorAll('.toast').forEach(e => e.remove());"
+        )
+        product_input = selenium.find_by_id("product_id_text_input")
+        product_input.clear()
+        product_input.send_keys(product)
         selenium.find_by_xpath(f"//a[contains(., '{product}')]").click()
-        selenium.find_by_id("display_amount").send_keys(10)
-        selenium.find_by_css(".fa-calendar").click()
+        _set_amount(selenium, 10)
+        if selenium.find_by_id("display_amount").get_attribute("value") != "10":
+            continue
         today = datetime.today()
-        selenium.find_by_xpath("//div[@id='best_before_date']/input").send_keys(f'{today.year + 1}-1-1')
+        date_input = selenium.find_by_xpath("//div[@id='best_before_date']/input")
+        date_input.click()
+        date_input.send_keys(Keys.CONTROL + 'a')
+        date_input.send_keys(f'{today.year + 1}-01-01')
+        date_input.send_keys(Keys.TAB)
         selenium.find_by_id("save-purchase-button").click()
         selenium.find_by_xpath(f"//div[contains(@class,'toast-success')]//div[contains(.,'{product}')]")
-    selenium.screenshot('purchase')
+        return
+    raise Exception(f"Failed to purchase {product} after {retries} attempts")
 
 
 def stock_overview_v4_2(selenium, expected_products=100):
