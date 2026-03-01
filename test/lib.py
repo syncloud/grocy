@@ -49,7 +49,7 @@ def products_v4_2(selenium, count=100):
         selenium.find_by_xpath("//option[.='Fridge']").click()
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
-        selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
+        _scroll_click(selenium, "//button[contains(.,'return to products')]")
         selenium.find_by_xpath("//h2[contains(.,'Products')]")
     selenium.screenshot('products')
 
@@ -91,6 +91,12 @@ def _nav_click(selenium, xpath):
     element = selenium.find_by_xpath(xpath)
     selenium.driver.execute_script("arguments[0].scrollIntoView(true);", element)
     element.click()
+
+
+def _scroll_click(selenium, xpath):
+    element = selenium.find_by_xpath(xpath)
+    selenium.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+    selenium.driver.execute_script("arguments[0].click();", element)
 
 
 def login_v4_5(selenium, device_user, device_password):
@@ -135,7 +141,7 @@ def products_v4_5(selenium, count=100):
         selenium.find_by_xpath("//option[.='Fridge']").click()
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
-        selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
+        _scroll_click(selenium, "//button[contains(.,'return to products')]")
         selenium.find_by_xpath("//h2[contains(.,'Products')]")
     selenium.screenshot('products')
 
@@ -202,7 +208,7 @@ def products_v4_5_upgrade(selenium, count=100, offset=0):
         selenium.find_by_xpath("//option[.='Fridge']").click()
         selenium.click_by(By.ID, "qu_id_stock")
         selenium.find_by_xpath("//option[.='Pack']").click()
-        selenium.find_by_xpath("//button[contains(.,'return to products')]").click()
+        _scroll_click(selenium, "//button[contains(.,'return to products')]")
         selenium.find_by_xpath("//h2[contains(.,'Products')]")
     selenium.screenshot('products')
 
