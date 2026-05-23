@@ -41,7 +41,7 @@ apps:
     command: bin/cli restore-post-start
 
 confinement: strict
-description: Grocy
+description: Groceries Management
 grade: stable
 name: grocy
 summary: Grocy
