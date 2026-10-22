@@ -12,6 +12,8 @@ export default defineConfig({
   timeout: 3_600_000,
   expect: { timeout: 30_000 },
   use: {
+    actionTimeout: 60_000,
+    navigationTimeout: 120_000,
     baseURL: `https://${app}.${domain}`,
     ignoreHTTPSErrors: true,
     trace: 'off',

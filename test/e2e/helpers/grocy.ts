@@ -80,7 +80,7 @@ export async function products(page: Page, from: number, to: number, screenshot:
 }
 
 export async function purchase(page: Page, from: number, to: number, screenshot: string) {
-  await sidebar(page).getByRole('link', { name: 'Purchase', exact: true }).click()
+  await sidebar(page).locator('a[href$="/purchase"]').click()
   const input = page.locator('#product_id_text_input')
   await expect(input).toBeVisible()
   const dueDate = `${new Date().getFullYear() + 1}-01-01`
@@ -111,7 +111,7 @@ async function purchaseOne(page: Page, product: string, dueDate: string) {
 }
 
 export async function stockOverview(page: Page, expectedProducts: number, screenshot: string) {
-  await sidebar(page).getByRole('link', { name: 'Stock overview', exact: true }).click()
+  await sidebar(page).locator('a[href$="/stockoverview"]').click()
   await expect(page.locator('#info-current-stock')).toHaveText(new RegExp(`^${expectedProducts} Products\\b`))
   await shoot(page, `${screenshot}-stock-overview`)
 }
