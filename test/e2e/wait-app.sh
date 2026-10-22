@@ -2,13 +2,20 @@
 
 APP_DOMAIN=$1
 
+getent ahosts "${APP_DOMAIN}" || true
+
+OK=0
 for i in $(seq 1 120); do
-  CODE=$(curl -sk -o /dev/null -w '%{http_code}' "https://${APP_DOMAIN}" || true)
-  if [ "$CODE" = "200" ]; then
-    echo "${APP_DOMAIN} is ready"
-    exit 0
+  RESULT=$(curl -skL -o /dev/null -w '%{http_code} %{remote_ip} %{url_effective}' "https://${APP_DOMAIN}" || true)
+  echo "${APP_DOMAIN}: ${RESULT}"
+  if [ "${RESULT%% *}" = "200" ]; then
+    OK=$((OK + 1))
+    if [ "$OK" -ge 3 ]; then
+      exit 0
+    fi
+  else
+    OK=0
   fi
-  echo "waiting for ${APP_DOMAIN}, got ${CODE}"
   sleep 5
 done
 

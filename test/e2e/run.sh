@@ -22,6 +22,6 @@ mkdir -p ${PLAYWRIGHT_ARTIFACT_DIR}
 trap 'chmod -R a+r ${PLAYWRIGHT_ARTIFACT_DIR}' EXIT
 
 ${ROOT}/apt.sh curl
-${DIR}/wait-app.sh ${PLAYWRIGHT_APP}.${PLAYWRIGHT_DOMAIN}
 npm ci --no-audit --no-fund
+${DIR}/wait-app.sh ${PLAYWRIGHT_APP}.${PLAYWRIGHT_DOMAIN}
 npx playwright test --project=${PLAYWRIGHT_PROJECT} "$SPEC"
