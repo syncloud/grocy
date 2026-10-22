@@ -1,10 +1,9 @@
 local name = 'grocy';
-local browser = 'firefox';
 local version = '4.5.0';
 local php = '8.3.36-fpm-bookworm';
 local nginx = '1.24.0';
 local platform = '26.04.10';
-local selenium = '4.35.0-20250828';
+local playwright = 'mcr.microsoft.com/playwright:v1.59.1-jammy';
 local store_publisher = 'stable-346';
 local python = '3.12-slim-bookworm';
 local distro_default = 'buster';
@@ -96,76 +95,45 @@ local build(arch, test_ui) = [{
 
          ] + (if test_ui then [
                 {
-                  name: 'selenium',
-                  image: 'selenium/standalone-' + browser + ':' + selenium,
-                  detach: true,
-                  environment: {
-                    SE_NODE_SESSION_TIMEOUT: '999999',
-                    START_XVFB: 'true',
-                  },
-                  volumes: [{
-                    name: 'shm',
-                    path: '/dev/shm',
-                  }],
+                  name: 'e2e',
+                  image: playwright,
                   commands: [
-                    'cat /etc/hosts',
-                    'DOMAIN="' + distro_default + '.com"',
-                    'APP_DOMAIN="' + name + '.' + distro_default + '.com"',
-                    'getent hosts $APP_DOMAIN | sed "s/$APP_DOMAIN/auth.$DOMAIN/g" | sudo tee -a /etc/hosts',
-                    'cat /etc/hosts',
-                    '/opt/bin/entry_point.sh',
+                    './test/e2e/run.sh specs/01-ui.spec.ts',
                   ],
                 },
                 {
-                  name: 'selenium-video',
-                  image: 'selenium/video:ffmpeg-6.1.1-20240621',
-                  detach: true,
-                  environment: {
-                    DISPLAY_CONTAINER_NAME: 'selenium',
-                    FILE_NAME: 'video.mkv',
-                  },
-                  volumes: [
-                    {
-                      name: 'shm',
-                      path: '/dev/shm',
-                    },
-                    {
-                      name: 'videos',
-                      path: '/videos',
-                    },
-                  ],
-                },
-
-                {
-                  name: 'test-ui',
+                  name: 'test-upgrade-prev',
                   image: 'python:' + python,
                   commands: [
                     'cd test',
                     './deps.sh',
-                    'py.test -x -s ui.py --browser-height=4000 --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+                    'py.test -x -s upgrade_prev.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
                   ],
-                  privileged: true,
-                  volumes: [{
-                    name: 'videos',
-                    path: '/videos',
-                  }],
                 },
-              ] + (if arch == 'amd64' then [
+                {
+                  name: 'e2e-before-upgrade',
+                  image: playwright,
+                  commands: [
+                    './test/e2e/run.sh specs/02-pre-upgrade.spec.ts',
+                  ],
+                },
                 {
                   name: 'test-upgrade',
                   image: 'python:' + python,
                   commands: [
                     'cd test',
                     './deps.sh',
-                    'py.test -x -s upgrade.py --browser-height=4000 --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+                    'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
                   ],
-                  privileged: true,
-                  volumes: [{
-                    name: 'videos',
-                    path: '/videos',
-                  }],
                 },
-              ] else [])
+                {
+                  name: 'e2e-after-upgrade',
+                  image: playwright,
+                  commands: [
+                    './test/e2e/run.sh specs/03-post-upgrade.spec.ts',
+                  ],
+                },
+              ]
               else []) + [
     {
       name: 'publish',
@@ -251,15 +219,7 @@ local build(arch, test_ui) = [{
       },
     },
     {
-      name: 'shm',
-      temp: {},
-    },
-    {
       name: 'dockersock',
-      temp: {},
-    },
-    {
-      name: 'videos',
       temp: {},
     },
   ],
