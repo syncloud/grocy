@@ -92,7 +92,8 @@ export async function purchase(page: Page, from: number, to: number, screenshot:
 
 async function purchaseOne(page: Page, product: string, dueDate: string) {
   const input = page.locator('#product_id_text_input')
-  await input.fill(product)
+  await input.fill('')
+  await input.pressSequentially(product)
   await page.getByRole('link', { name: product, exact: true }).click()
   await expect(page.locator('#productcard-product-name')).toHaveText(product)
   const amount = page.locator('#display_amount')
