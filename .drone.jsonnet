@@ -8,7 +8,6 @@ local store_publisher = 'stable-346';
 local python = '3.12-slim-bookworm';
 local distro_default = 'buster';
 local distros = ['bookworm', 'buster'];
-local dind = '20.10.21-dind';
 
 local build(arch, test_ui) = [{
   kind: 'pipeline',
@@ -20,13 +19,6 @@ local build(arch, test_ui) = [{
   },
   steps: [
            {
-             name: 'version',
-             image: 'debian:bookworm-slim',
-             commands: [
-               'echo $DRONE_BUILD_NUMBER > version',
-             ],
-           },
-           {
              name: 'download',
              image: 'debian:bookworm-slim',
              commands: [
@@ -37,12 +29,7 @@ local build(arch, test_ui) = [{
              name: 'cli',
              image: 'golang:1.23',
              commands: [
-               'cd cli',
-               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/install ./cmd/install',
-               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/configure ./cmd/configure',
-               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/pre-refresh ./cmd/pre-refresh',
-               'CGO_ENABLED=0 go build -o ../build/snap/meta/hooks/post-refresh ./cmd/post-refresh',
-               'CGO_ENABLED=0 go build -o ../build/snap/bin/cli ./cmd/cli',
+               './cli/build.sh',
              ],
            },
            {
@@ -77,8 +64,7 @@ local build(arch, test_ui) = [{
              name: 'package',
              image: 'debian:bookworm-slim',
              commands: [
-               'VERSION=$(cat version)',
-               './package.sh ' + name + ' $VERSION ',
+               './package.sh ' + name + ' $DRONE_BUILD_NUMBER',
              ],
            },
          ] + [
@@ -86,9 +72,7 @@ local build(arch, test_ui) = [{
              name: 'test ' + distro,
              image: 'python:' + python,
              commands: [
-               'cd test',
-               './deps.sh',
-               'py.test -x -s test.py --distro=' + distro + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+               './ci/test.sh test.py ' + distro + ' ' + name,
              ],
            }
            for distro in distros
@@ -105,9 +89,7 @@ local build(arch, test_ui) = [{
                   name: 'test-upgrade-prev',
                   image: 'python:' + python,
                   commands: [
-                    'cd test',
-                    './deps.sh',
-                    'py.test -x -s upgrade_prev.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+                    './ci/test.sh upgrade_prev.py ' + distro_default + ' ' + name,
                   ],
                 },
                 {
@@ -121,9 +103,7 @@ local build(arch, test_ui) = [{
                   name: 'test-upgrade',
                   image: 'python:' + python,
                   commands: [
-                    'cd test',
-                    './deps.sh',
-                    'py.test -x -s upgrade.py --distro=' + distro_default + ' --ver=$DRONE_BUILD_NUMBER --app=' + name,
+                    './ci/test.sh upgrade.py ' + distro_default + ' ' + name,
                   ],
                 },
                 {
@@ -177,18 +157,6 @@ local build(arch, test_ui) = [{
   },
   services: [
     {
-      name: 'docker',
-      image: 'docker:' + dind,
-      privileged: true,
-      volumes: [
-        {
-          name: 'dockersock',
-          path: '/var/run',
-        },
-      ],
-    },
-  ] + [
-    {
       name: name + '.' + distro + '.com',
       image: 'syncloud/platform-' + distro + '-' + arch + ':' + platform,
       privileged: true,
@@ -217,10 +185,6 @@ local build(arch, test_ui) = [{
       host: {
         path: '/dev',
       },
-    },
-    {
-      name: 'dockersock',
-      temp: {},
     },
   ],
 }];
