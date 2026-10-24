@@ -2,7 +2,8 @@ local name = 'grocy';
 local version = '4.5.0';
 local php = '8.3.36-fpm-bookworm';
 local nginx = '1.24.0';
-local platform = '26.04.10';
+local platform = '26.08.01';
+local platform_image(distro) = 'syncloud/platform-' + distro + ':' + platform;
 local playwright = 'mcr.microsoft.com/playwright:v1.59.1-jammy';
 local store_publisher = 'stable-346';
 local python = '3.12-slim-bookworm';
@@ -41,7 +42,7 @@ local build(arch, test_ui) = [{
            },
            {
              name: 'nginx test',
-             image: 'syncloud/platform-buster-' + arch + ':' + platform,
+             image: platform_image('buster'),
              commands: [
                './nginx/test.sh',
              ],
@@ -55,7 +56,7 @@ local build(arch, test_ui) = [{
            },
            {
              name: 'php test',
-             image: 'syncloud/platform-buster-' + arch + ':' + platform,
+             image: platform_image('buster'),
              commands: [
                './php/test.sh',
              ],
@@ -158,7 +159,7 @@ local build(arch, test_ui) = [{
   services: [
     {
       name: name + '.' + distro + '.com',
-      image: 'syncloud/platform-' + distro + '-' + arch + ':' + platform,
+      image: platform_image(distro),
       privileged: true,
       volumes: [
         {
