@@ -1,7 +1,7 @@
 local name = 'grocy';
 local version = '4.5.0';
 local php = '8.3.36-fpm-bookworm';
-local nginx = '1.24.0';
+local nginx = '1.30.7';
 local platform = '26.08.01';
 local platform_image(distro) = 'syncloud/platform-' + distro + ':' + platform;
 local playwright = 'mcr.microsoft.com/playwright:v1.59.1-jammy';
