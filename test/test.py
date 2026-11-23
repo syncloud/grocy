@@ -7,6 +7,9 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from subprocess import check_output
 from syncloudlib.integration.hosts import add_host_alias
 from syncloudlib.integration.installer import local_install
+from syncloudlib.http import wait_for_rest
+
+import snapd
 
 TMP_DIR = '/tmp/syncloud'
 
@@ -43,7 +46,6 @@ def module_setup(request, device, platform_data_dir, app_dir, artifact_dir):
 
         app_log_dir = join(artifact_dir, 'log')
         os.mkdir(app_log_dir)
-        device.scp_from_device('/var/snap/grocy/common/log/*.log', app_log_dir)
         device.scp_from_device('{0}/*'.format(TMP_DIR), app_log_dir)
         shutil.copy2('/etc/hosts', app_log_dir)
         check_output('chmod -R a+r {0}'.format(artifact_dir), shell=True)
@@ -54,6 +56,7 @@ def module_setup(request, device, platform_data_dir, app_dir, artifact_dir):
 def test_start(module_setup, device, device_host, app, domain):
     add_host_alias(app, device_host, domain)
     device.run_ssh('date', retries=100)
+    snapd.settle(device)
     device.run_ssh('mkdir {0}'.format(TMP_DIR))
 
 
@@ -62,8 +65,10 @@ def test_activate_device(device):
     assert response.status_code == 200, response.text
 
 
-def test_install(app_archive_path, device_host, device_password):
+def test_install(app_archive_path, device_host, device_password, app_domain, device, app):
     local_install(device_host, device_password, app_archive_path)
+    wait_for_rest(requests.session(), 'https://{0}'.format(app_domain), 200, 100)
+    snapd.assert_no_restarts(device, app)
 
 
 def test_visible_through_platform(app_domain):
@@ -95,9 +100,13 @@ def test_remove(device, app):
     assert response.status_code == 200, response.text
 
 
-def test_reinstall(app_archive_path, device_host, device_password):
+def test_reinstall(app_archive_path, device_host, device_password, app_domain, device, app):
     local_install(device_host, device_password, app_archive_path)
+    wait_for_rest(requests.session(), 'https://{0}'.format(app_domain), 200, 100)
+    snapd.assert_no_restarts(device, app)
 
 
-def test_upgrade(app_archive_path, device_host, device_password):
+def test_upgrade(app_archive_path, device_host, device_password, app_domain, device, app):
     local_install(device_host, device_password, app_archive_path)
+    wait_for_rest(requests.session(), 'https://{0}'.format(app_domain), 200, 100)
+    snapd.assert_no_restarts(device, app)

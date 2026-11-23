@@ -19,3 +19,7 @@ geckodriver
 test.file*
 venv
 node_modules
+/artifact
+*.snap
+/package.name
+/version

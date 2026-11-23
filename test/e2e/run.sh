@@ -4,12 +4,7 @@ DIR=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "${DIR}/../.." && pwd)
 cd "$DIR"
 
-SPEC=$1
-
-if [ -z "$SPEC" ]; then
-  echo "usage: $0 spec"
-  exit 1
-fi
+SPEC=${1:?usage: run.sh <spec>}
 
 export PLAYWRIGHT_DOMAIN=buster.com
 export PLAYWRIGHT_APP=grocy
@@ -22,6 +17,6 @@ mkdir -p ${PLAYWRIGHT_ARTIFACT_DIR}
 trap 'chmod -R a+r ${PLAYWRIGHT_ARTIFACT_DIR}' EXIT
 
 ${ROOT}/apt.sh curl
-npm ci --no-audit --no-fund
+npm ci --no-audit --no-fund --fetch-retries=5
 ${DIR}/wait-app.sh ${PLAYWRIGHT_APP}.${PLAYWRIGHT_DOMAIN}
 npx playwright test --project=${PLAYWRIGHT_PROJECT} "$SPEC"

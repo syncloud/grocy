@@ -67,7 +67,7 @@ func (i *Installer) Install() error {
 		return err
 	}
 
-	err = i.StorageChange()
+	err = i.InitStorage()
 	if err != nil {
 		return err
 	}
@@ -91,7 +91,7 @@ func (i *Installer) Configure() error {
 }
 
 func (i *Installer) Initialize() error {
-	err := i.StorageChange()
+	err := i.InitStorage()
 	if err != nil {
 		return err
 	}
@@ -105,12 +105,8 @@ func (i *Installer) Initialize() error {
 }
 
 func (i *Installer) Upgrade() error {
-	err := i.StorageChange()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	err := i.InitStorage()
+	return err
 }
 
 func (i *Installer) IsInstalled() bool {
@@ -140,13 +136,22 @@ func (i *Installer) PostRefresh() error {
 	return nil
 }
 
-func (i *Installer) StorageChange() error {
+func (i *Installer) InitStorage() error {
 	storageDir, err := i.platformClient.InitStorage(App, App)
 	if err != nil {
 		return err
 	}
 
-	err = linux.Chown(storageDir, App)
+	err = linux.CreateMissingDirs(path.Join(storageDir, "tmp"))
+	if err != nil {
+		return err
+	}
+
+	return linux.Chown(storageDir, App)
+}
+
+func (i *Installer) StorageChange() error {
+	err := i.InitStorage()
 	if err != nil {
 		return err
 	}

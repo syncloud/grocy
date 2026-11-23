@@ -1,16 +1,13 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
 
-DIR=$( cd "$( dirname "$0" )" && pwd )
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd ${DIR}
 
 VERSION=$1
 BUILD_DIR=${DIR}/build/snap
-mkdir -p $BUILD_DIR
+mkdir -p ${BUILD_DIR}
 
-apt update
-apt install -y wget bzip2 unzip
-
-
-wget --progress=dot:giga https://github.com/grocy/grocy/releases/download/v${VERSION}/grocy_${VERSION}.zip -O grocy.zip
-unzip -q grocy.zip -d grocy
-mv grocy ${BUILD_DIR}
+${DIR}/apt.sh wget unzip
+${DIR}/download-retry.sh https://github.com/grocy/grocy/releases/download/v${VERSION}/grocy_${VERSION}.zip ${DIR}/build/grocy.zip
+rm -rf ${BUILD_DIR}/grocy
+unzip -q ${DIR}/build/grocy.zip -d ${BUILD_DIR}/grocy
