@@ -5,6 +5,8 @@ from syncloudlib.integration.hosts import add_host_alias
 from syncloudlib.integration.installer import local_install
 from syncloudlib.http import wait_for_rest
 
+import snapd
+
 TMP_DIR = '/tmp/syncloud'
 
 
@@ -19,10 +21,13 @@ def module_setup(request, device, artifact_dir):
     request.addfinalizer(module_teardown)
 
 
-def test_start(module_setup, app, device_host, domain):
+def test_start(module_setup, app, device_host, domain, device):
     add_host_alias(app, device_host, domain)
+    device.activated()
+    snapd.settle(device)
 
 
-def test_upgrade(device_host, device_password, app_archive_path, app_domain):
+def test_upgrade(device_host, device_password, app_archive_path, app_domain, device, app):
     local_install(device_host, device_password, app_archive_path)
     wait_for_rest(requests.session(), "https://{0}".format(app_domain), 200, 100)
+    snapd.assert_no_restarts(device, app)

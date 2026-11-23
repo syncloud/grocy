@@ -1,7 +1,6 @@
 #!/bin/bash -e
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )
-LIBS=$(echo ${DIR}/lib/*-linux-gnu*)
-LIBS=$LIBS:$(echo ${DIR}/usr/lib/*-linux-gnu*)
-LIBS=$LIBS:$(echo ${DIR}/usr/lib)
-LIBS=$LIBS:$(echo ${DIR}/usr/lib/*-linux-gnu*/samba)
-GROCY_DATAPATH=/var/snap/grocy/current/data MAGICK_CODER_MODULE_PATH=$(echo ${DIR}/usr/lib/ImageMagickCoders) PHP_INI_SCAN_DIR=${DIR}/usr/local/etc/php/conf.d ${DIR}/lib/*-linux*/ld-linux-*.so* --library-path $LIBS ${DIR}/usr/local/sbin/php-fpm "$@"
+LIBS=$(echo ${DIR}/lib/*-linux-gnu* ${DIR}/usr/lib/*-linux-gnu* ${DIR}/usr/lib | tr ' ' ':')
+LOADER=$(ls ${DIR}/lib/*-linux-gnu*/ld-linux*.so* ${DIR}/lib/ld-linux*.so* 2>/dev/null | head -1)
+export PHP_INI_SCAN_DIR=${DIR}/usr/local/etc/php/conf.d
+exec "${LOADER}" --library-path "${LIBS}" ${DIR}/usr/local/sbin/php-fpm "$@"

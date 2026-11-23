@@ -23,7 +23,7 @@ export async function login(page: Page, screenshot: string) {
   const username = page.locator('#username')
   await expect(username).toBeVisible()
   await username.fill(env('PLAYWRIGHT_DEVICE_USER'))
-  const password = page.locator('#password')
+  const password = page.locator('#password_input, #password')
   await password.fill(env('PLAYWRIGHT_DEVICE_PASSWORD'))
   await shoot(page, `${screenshot}-login`)
   await password.press('Enter')

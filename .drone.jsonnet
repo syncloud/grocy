@@ -1,9 +1,12 @@
 local name = 'grocy';
-local version = '4.5.0';
-local php = '8.3.36-fpm-bookworm';
+local version = '4.7.1';
+local php = '8.5.13-fpm-bookworm';
 local nginx = '1.30.7';
-local platform = '26.08.01';
+local platform = '26.10.02';
+local golang = '1.25';
+local debian = 'bookworm-slim';
 local platform_image(distro) = 'syncloud/platform-' + distro + ':' + platform;
+local snapd_hold = "mkdir -p /etc/systemd/system/snapd.service.d && printf '[Service]\\nExecStartPost=/bin/sh -c \"/usr/bin/snap set system refresh.hold=2099-01-01T00:00:00Z\"\\n' > /etc/systemd/system/snapd.service.d/disable-refresh.conf && exec /sbin/init";
 local playwright = 'mcr.microsoft.com/playwright:v1.59.1-jammy';
 local store_publisher = 'stable-346';
 local python = '3.12-slim-bookworm';
@@ -21,14 +24,14 @@ local build(arch, test_ui) = [{
   steps: [
            {
              name: 'download',
-             image: 'debian:bookworm-slim',
+             image: 'debian:' + debian,
              commands: [
                './download.sh ' + version,
              ],
            },
            {
              name: 'cli',
-             image: 'golang:1.23',
+             image: 'golang:' + golang,
              commands: [
                './cli/build.sh',
              ],
@@ -41,29 +44,26 @@ local build(arch, test_ui) = [{
              ],
            },
            {
-             name: 'nginx test',
-             image: platform_image('buster'),
-             commands: [
-               './nginx/test.sh',
-             ],
-           },
-           {
              name: 'php',
              image: 'php:' + php,
              commands: [
                './php/build.sh',
              ],
            },
+         ] + [
            {
-             name: 'php test',
-             image: platform_image('buster'),
+             name: component + ' test ' + distro,
+             image: platform_image(distro),
              commands: [
-               './php/test.sh',
+               './' + component + '/test.sh',
              ],
-           },
+           }
+           for component in ['cli', 'nginx', 'php']
+           for distro in distros
+         ] + [
            {
              name: 'package',
-             image: 'debian:bookworm-slim',
+             image: 'debian:' + debian,
              commands: [
                './package.sh ' + name + ' $DRONE_BUILD_NUMBER',
              ],
@@ -160,6 +160,7 @@ local build(arch, test_ui) = [{
     {
       name: name + '.' + distro + '.com',
       image: platform_image(distro),
+      entrypoint: ['/bin/sh', '-c', snapd_hold],
       privileged: true,
       volumes: [
         {

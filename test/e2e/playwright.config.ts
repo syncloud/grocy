@@ -1,7 +1,8 @@
 import { defineConfig, devices } from '@playwright/test'
+import { env } from './helpers/env'
 
-const domain = process.env.PLAYWRIGHT_DOMAIN ?? 'buster.com'
-const app = process.env.PLAYWRIGHT_APP ?? 'grocy'
+const domain = env('PLAYWRIGHT_DOMAIN')
+const app = env('PLAYWRIGHT_APP')
 
 export default defineConfig({
   testDir: './specs',

@@ -1,23 +1,25 @@
+name: grocy
+summary: Grocy
+description: Groceries Management
+grade: stable
+
 apps:
   php-fpm:
     user: grocy
-    command: bin/service.php-fpm.sh start
-    daemon: forking
-    plugs:
-    - network
-    - network-bind
-    restart-condition: always
-    post-start-command: bin/service.php-fpm.sh post-start
-    before: [nginx]
-  
-  nginx:
-    command: bin/service.nginx.sh
-    user: grocy
+    command: bin/service.php-fpm.sh
     daemon: simple
-    plugs:
-    - network
-    - network-bind
     restart-condition: always
+    start-timeout: 600s
+    restart-delay: 10s
+    before: [nginx]
+
+  nginx:
+    user: grocy
+    command: bin/service.nginx.sh
+    daemon: simple
+    restart-condition: always
+    start-timeout: 600s
+    restart-delay: 10s
 
   php:
     command: bin/php-runner
@@ -39,9 +41,3 @@ apps:
 
   restore-post-start:
     command: bin/cli restore-post-start
-
-confinement: strict
-description: Groceries Management
-grade: stable
-name: grocy
-summary: Grocy
